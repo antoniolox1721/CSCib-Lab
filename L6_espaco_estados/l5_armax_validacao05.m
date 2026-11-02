@@ -1,4 +1,4 @@
-%% (com zona morta d_zm = 0,25 V) Validacao com dados_ID_validacao_0_5.mat (quadrada 0,5 V, 0,6 Hz) + re-estimacao. Correr com pasta = L5_armax.
+%% (com zona morta d_zm = 0,25 V) Validacao com dados_ID_validacao_0_5.mat (quadrada 0,5 V, 0,6 Hz) + re-estimacao. Correr com pasta = L6_espaco_estados.
 clear; clc;
 pasta = fullfile(fileparts(pwd), 'L4_identificacao');
 C = load(fullfile(fileparts(pwd), 'L2-L3_sensores', 'calibracao_sensores.mat'), 'Kp', 'Ke', 'offset');

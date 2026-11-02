@@ -1,0 +1,54 @@
+Sessão L3:
+    Calibrar Ke (Extensómetro):
+    - Fixar a barra no pente rígido (fora do motor).
+    - Verificar que o cabo do extensómetro ficou BEM LIGADO.
+    - Ler as 15 posições (da +7 à -7), correr 2s de simulação, tirar a mediana da tensão.
+    - Usar o meu Excel para calcular o Ke por mínimos quadrados.
+
+Sessão L4:
+    1. Setup Obrigatório: 
+    - Usar o ficheiro "_20ms" para garantir que o Sample Time está a 0.02 (50Hz).
+    - Ligar a barra ao motor.
+    2. Experiência 1 (Onda Quadrada):
+    - Signal Generator: Square, ~0.4 Hz, Amplitude 1V.
+    - Gravar 30 a 40 segundos (ter cuidado com os cabos por causa do drift).
+    - Fazer "view_io save" e mudar nome para "dados_ID_quadrada_1V.mat".
+    3. Experiência 2 (PRBS):
+    - Gerar PRBS no MATLAB: sinal_prbs = idinput(2000, 'prbs', [0 0.1], [-1 1]);
+    - Trocar o Signal Generator por "From Workspace" a ler "sinal_prbs".
+    - Correr 40s, fazer save, chamar "dados_ID_prbs.mat".
+    4. Experiência 3 (Extremos - para o relatório):
+    - Fazer teste com sinal mínimo (0.1V) para ver a folga das engrenagens (zona morta).
+    - Fazer teste alto (~2.5V) para ver não-linearidades extremas.
+    5. O MAIS IMPORTANTE (VALIDAÇÃO):
+    - Fazer mais UMA gravação nova (ex: quadrada a 0.6 Hz ou um PRBS diferente).
+    - Gravar como "dados_VALIDACAO.mat". 
+    - É só para testar no Lab 6, não para identificar o modelo.
+
+CHECK FINAL ANTES DE SAIR: Fazer "view_io plot". Devia de estar igual a Fig.11 do guia
+
+Why use two sensors for this work - Answer - Dito pelo professor em relação ao codigo da parte 4.
+
+
+
+=== L5-L7: estado final (atualizado 2026-10-19; substitui as notas anteriores) ===
+Dados (todos reais, Ts = 0.02 s): ID = quadrada 1 V + PRBS 1 Hz 0.5 V + PRBS 2.5 Hz 0.5 V; validação reservada = quadrada 1 V e 0.5 V (0.6 Hz). Extremos 2.5 V (pot dá 32 voltas) e 0.1 V (barra não mexe) só para relatório.
+    Auditoria (L7_revisao/l7_auditoria_dados.m): sem NaN, Ts exato, sem voltas nos 5 registos usados. PRBS a 1 V foram repetidos a 0.5 V (pot deu a volta).
+Calibração verificada: Kp = 34.835 °/V (independente: 34.838 a partir do span do pot em dados_ID_grande). Ke = -5.775 °/V (os patamares dos ficheiros ScopeData_Ke_* reproduzem as leituras; slot 0 lido 2x: -0.2857 e -0.2698 V).
+    Offset -0.0373 V coincide com o extensómetro em repouso na barra montada (-0.013..-0.035 V); o zero do pente (-0.277 V) é artefacto da fixação no pente, só o declive Ke interessa. L = 0.30 m por confirmar (afeta só a escala de alfa).
+Descoberta principal: zona morta ~0.25 V no motor. Sem ela o ganho medido/modelo variava 0.66..1.5 conforme a amplitude (quadrada 1 V só: 94/45 % em val 1 V/0.5 V; PRBS 1 Hz só: 66/86 %; merge 3: 88.7/57.5 %).
+    Validação cruzada leave-one-experiment-out nos 5 registos (l7_selecao_modelo.m, l7_refinar_d.m): d = 0 -> fit médio 66.6 %, desvio de ganho 0.227; d = 0.25 V -> fit médio 82.7 % (pior 73.0 %), desvio de ganho 0.017. Ótimo entre 0.24 e 0.26 V.
+Cadeia final: descartar 8 s -> y = theta*Kp + (alfa - offset)*Ke -> zona morta d = 0.25 V em u -> filtro af = 0.8 (deriva+filtra) -> detrend -> armax(3,4,3,1) nos 3 ficheiros de ID -> conv com [1 -1] -> tf2ss.
+Modelo final (l7_revisao.m; igual a L5_armax/l5_armax_oficial.m e a L4_identificacao/modelo_identificado.mat):
+    A(q^-1) = [1 -1.14992 0.14506 0.15192]   B(q^-1) = [0 -0.27182 0.46297 -0.26135 0.40341]
+    A linha 1 = [2.14992 -1.29498 -0.00686 0.15192]; B = [1;0;0;0]; C = [-0.27182 0.46297 -0.26135 0.40341]; D = 0. Controlável e observável (rank 4).
+    Polos: 1; 0.7146±0.1830j; -0.2792 (par ≈ 3.1 Hz, zeta ≈ 0.77). Zeros: 0.0206±0.9447j e +1.6620 (fase não mínima; em 100 % das amostras Monte-Carlo da covariância dos parâmetros).
+Validação (dados não usados no treino): 1 V -> 92.1 %; 0.5 V -> 85.4 % (sinal derivado+filtrado); posição 73.3 / 74.6 % (métrica estrita, inclui deriva); ganho medido/modelo 1.00 / 0.98.
+    Resposta em frequência: o modelo coincide com a estimativa espectral (spa) dos PRBS dentro de 1.0-1.8 dB (mediana, 0.5-5 Hz).
+    Ljung-Box continua a rejeitar brancura (erro de simulação); o erro restante concentra-se logo após as comutações (folga/zona morta fina).
+Revisão L7: af 0.5-0.95 e ordens (2,3)..(4,4): diferenças < 1 p.p. entre os melhores = ruído; mantido af = 0.8, (3,4,3,1) (menor polo máximo, 0.738). Ts = 0.04 s não melhora (91.0/82.1 vs 92.1/85.4).
+    Re-treinar incluindo val 0.5 V (l5_armax_validacao05.m) não melhora (val 1 V 91.2 vs 92.1) -> modelo mantém-se.
+Testes: L7_revisao/l7_testes.m (dados, calibração, modelo, validação independente com filter(), resposta em frequência, Monte-Carlo) - todos passam. Backup do modelo antigo (merge, sem zona morta): L7_revisao/backup_merge3/ e L4_identificacao/modelo_identificado_merge3.mat.
+L8: projeto_controlador.m corrigido (dlqe devolve o ganho do estimador "corrente" M; o observador é de predição, logo L = A*M; antes o assert falhava com polos em 1.1). Corre até ao fim com o modelo novo (observador estável, Nbar = 0.62).
+Por fazer: (1) acrescentar compensação da zona morta no Simulink de tempo real (u_motor = u + 0.25*sign(u)); NÃO está em criar_modelo_lqg_tempo_real.m e não foi testada na planta. (2) medir L real da barra. (3) repetir o pente do Ke. (4) escrever a discussão (b) resposta temporal e (c) em frequência do guia, L6 (figuras em L7_revisao/l7_malha_aberta.png).
+Teste de sobreajuste (L7_revisao/l7_validacao_aninhada.m, 2026-10-19): d escolhido SO com os 3 ficheiros de ID (leave-one-out entre eles) -> 0.24 V; nos 2 ficheiros reservados (que não participaram na escolha): 92.2 % (1 V) e 84.9 % (0.5 V), ganho 1.01 / 0.96 - praticamente igual a d = 0.25 (92.1 / 85.4). Sem zona morta: 88.7 / 57.5. A fuga de seleção é ~0.5 p.p.; o ganho vem da estrutura, não do ajuste fino de d.

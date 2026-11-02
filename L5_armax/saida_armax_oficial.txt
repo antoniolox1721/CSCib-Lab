@@ -1,0 +1,22 @@
+na nb | fit_val | leave-one-out (sem Q / sem P1 / sem P2) | max|polo|
+2  2  |  89.15 |  83.38  75.33  70.79 | 0.831
+[> In idpack.ltidata/computeModelQualityMetrics (line 221)
+2  4  |  92.19 |  87.53  72.65  75.62 | 0.728
+[> In idpack.ltidata/computeModelQualityMetrics (line 221)
+3  2  |  89.12 |  84.82  73.99  70.29 | 0.854
+3  3  |  89.82 |  85.59  74.68  70.75 | 0.836
+3  4  |  92.13 |  87.21  75.16  75.33 | 0.738
+[> In idpack.ltidata/computeModelQualityMetrics (line 221)
+4  2  |  91.43 |  85.86  74.08  77.62 | 0.824
+4  3  |  91.28 |  86.22  73.91  77.63 | 0.830
+4  4  |  90.57 |  86.86  75.34  72.48 | 0.812
+[> In idpack.ltidata/computeModelQualityMetrics (line 221)
+5  2  |  90.07 |  84.55  72.73  77.57 | 0.869
+5  3  |  90.84 |  85.01  73.65  77.94 | 0.923
+5  4  |  91.99 |  85.72  74.52  77.96 | 0.827
+5  5  |  92.08 |  86.50  74.61  77.96 | 0.835
+ARMAX(3,4,3,1) oficial: fit_val = 92.13 % | Ljung-Box h=1 p=0
+A =     1.0000   -1.1499    0.1451    0.1519
+B =          0   -0.2718    0.4630   -0.2614    0.4034
+polos (filtrado):    0.7146 + 0.1830i   0.7146 - 0.1830i  -0.2792 + 0.0000i
+estados 4, rank ctrb 4

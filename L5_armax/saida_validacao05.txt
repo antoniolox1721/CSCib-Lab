@@ -1,0 +1,35 @@
+== Treino Q+P1+P2; fit em val(1V,0.6Hz) | val(0.5V,0.6Hz) | media | max|polo|
+2 2 |  89.15 |  84.46 |  86.80 | 0.831
+[> In idpack.ltidata/computeModelQualityMetrics (line 221)
+2 4 |  92.19 |  82.44 |  87.32 | 0.728
+[> In idpack.ltidata/computeModelQualityMetrics (line 221)
+3 2 |  89.12 |  82.23 |  85.68 | 0.854
+3 3 |  89.82 |  83.54 |  86.68 | 0.836
+3 4 |  92.13 |  85.39 |  88.76 | 0.738
+[> In idpack.ltidata/computeModelQualityMetrics (line 221)
+4 2 |  91.43 |  84.32 |  87.87 | 0.824
+4 3 |  91.28 |  84.10 |  87.69 | 0.830
+4 4 |  90.57 |  84.82 |  87.69 | 0.812
+[> In idpack.ltidata/computeModelQualityMetrics (line 221)
+5 2 |  90.07 |  82.28 |  86.18 | 0.869
+5 3 |  90.84 |  83.84 |  87.34 | 0.923
+5 4 |  91.99 |  84.92 |  88.46 | 0.827
+5 5 |  92.08 |  85.05 |  88.56 | 0.835
+Melhor media nas 2 validacoes: na=3 nb=4
+Modelo anterior (3,4,3,1): val1V 92.13 | val0.5V 85.39
+== Re-estimacao incluindo val0.5 no treino (val 1V continua de fora)
+2 2 | val1V  88.17 | LOO medio  79.03 (Q 82.7 P1 75.7 P2 72.7 V05 85.0) | 0.832
+[> In idpack.ltidata/computeModelQualityMetrics (line 221)
+2 4 | val1V  92.05 | LOO medio  80.73 (Q 88.2 P1 73.5 P2 77.8 V05 83.4) | 0.703
+[> In idpack.ltidata/computeModelQualityMetrics (line 221)
+3 2 | val1V  88.69 | LOO medio  78.99 (Q 85.0 P1 74.3 P2 74.0 V05 82.7) | 0.853
+3 3 | val1V  89.21 | LOO medio  79.25 (Q 85.3 P1 75.1 P2 72.5 V05 84.2) | 0.834
+3 4 | val1V  91.24 | LOO medio  81.43 (Q 86.8 P1 75.7 P2 77.1 V05 86.2) | 0.742
+4 2 | val1V  90.73 | LOO medio  81.37 (Q 86.5 P1 74.6 P2 79.4 V05 85.0) | 0.827
+4 3 | val1V  90.66 | LOO medio  81.36 (Q 86.7 P1 74.5 P2 79.4 V05 84.9) | 0.830
+4 4 | val1V  89.72 | LOO medio  80.65 (Q 86.9 P1 75.8 P2 74.4 V05 85.5) | 0.810
+[> In idpack.ltidata/computeModelQualityMetrics (line 221)
+5 2 | val1V  89.66 | LOO medio  80.50 (Q 86.7 P1 73.4 P2 78.9 V05 83.0) | 0.870
+5 3 | val1V  90.20 | LOO medio  81.14 (Q 86.0 P1 74.3 P2 79.6 V05 84.7) | 0.932
+5 4 | val1V  91.22 | LOO medio  81.67 (Q 86.2 P1 75.0 P2 79.8 V05 85.7) | 0.822
+5 5 | val1V  91.31 | LOO medio  81.80 (Q 86.5 P1 75.1 P2 79.8 V05 85.8) | 0.835
